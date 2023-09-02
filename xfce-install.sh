@@ -11,7 +11,7 @@ fi
 cat ./xsessionrc >> /home/$SUDO_USER/.xsessionrc
 chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.xsessionrc
 
-apt install -y \
+apt nala -y \
     libxfce4ui-utils \
     thunar \
     xfce4-appfinder \
@@ -30,7 +30,9 @@ apt install -y \
     network-manager-openvpn-gnome \
     paper-icon-theme \
     moka-icon-theme \
-    papirus-icon-theme
+    papirus-icon-theme \
+    qt5ct \
+    adwaita-qt
 
 echo 
 echo xfce install complete, please reboot and issue 'startx'
