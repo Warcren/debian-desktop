@@ -11,7 +11,7 @@ fi
 cat ./xsessionrc >> /home/$SUDO_USER/.xsessionrc
 chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.xsessionrc
 
-apt nala -y \
+    nala install  -y \
     libxfce4ui-utils \
     thunar \
     xfce4-appfinder \
