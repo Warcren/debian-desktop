@@ -19,7 +19,7 @@ homedir=$(getent passwd "$username" | cut -d: -f6)
 # This function runs the 'sudo apt-get install -y nala' command and install nala on the OS
 run_nala_install() {
 	
-    echo "Running 'sudo apt-get install -y nala' command..."
+    sudo apt update && sudo apt upgrade
     sudo apt-get install -y nala
 }
 
@@ -54,8 +54,8 @@ sudo() {
 
 # This function runs the 'nala' command and installs several needed packages:
 run_nala_installPackages() {
-    echo "Running 'sudo nala install -y xz-utils git curl nano debconf' command..."
-    sudo nala install -y xz-utils curl nano debconf ufw fail2ban net-tools iptables
+
+    sudo nala install -y xz-utils curl nano debconf ufw fail2ban net-tools iptables picom
 }
 
 # This function installs NixPackages:
@@ -66,47 +66,30 @@ run_nix_install() {
 }
 
 #This Function activates the nix-daemon script and installs Jellyfin using Nix
-run_nixjellyfin() {
+run_installnixpack() {
   # Define the commands to be run
   command1=". /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
-  command2="nix profile install nixpkgs#jellyfin"
+  command2="nix profile install nixpkgs#librewolf"
+  command3="nix profile install nixpkgs#conky"
+  command4="nix profile install nixpkgs#ulauncher"
 
   # Run the commands
   eval "$command1"
   eval "$command2"
+  eval "$command3"
+  eval "$command4"
 }
 #This function
-create_jellyfin_service() {
-  # Define the service code
-  service_code='[Unit]
-Description=Jellyfin Media Server
-After=network.target
+run_install_lightdm() {
+    sudo nala install -y \
+	lightdm \
+	slick-greeter \
+	accountsservice
 
-[Service]
-User=root
-Group=root
-UMask=002
-
-Type=simple
-ExecStart=/nix/var/nix/profiles/default/bin/jellyfin
-Restart=on-failure
-RestartSec=5
-TimeoutStopSec=20
-
-[Install]
-WantedBy=multi-user.target'
-
-  # Create the service file
-  echo "$service_code" > /etc/systemd/system/jellyfin.service
-
-  # Reload the systemd daemon to recognize the new service
-  systemctl daemon-reload
-
-  # Enable the service to start automatically at boot
-  systemctl enable jellyfin.service
-
-  # Start the service
-  systemctl start jellyfin.service
+	sudo systemctl daemon-reload
+	sudo systemctl enable lightdm
+	sudo dpkg-reconfigure lightdm
+	sudo systemctl start lightdm
 }
 
 #This function applies a security baseline.
@@ -142,6 +125,85 @@ EOF
     sudo netstat -tunlp 
 }
 
+run_xfce_install() {
+cat ./xsessionrc >> /home/$SUDO_USER/.xsessionrc
+chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.xsessionrc
+
+    sudo nala install  -y \
+    libxfce4ui-utils \
+    thunar \
+    xfce4-appfinder \
+    xfce4-panel \
+    xfce4-panel-profiles \
+    xfce4-pulseaudio-plugin \
+    xfce4-whiskermenu-plugin \
+    xfce4-session \
+    xfce4-settings \
+    xfce4-terminal \
+    xfconf \
+    xfdesktop4 \
+    xfwm4 \
+    adwaita-qt \
+    qt5ct \
+    network-manager-openvpn network-manager-gnome \
+    network-manager-openvpn-gnome
+}
+
+run_xfce_dock_install() {
+
+	sudo nala install -y \ 
+	wget \
+	xorg-dev \
+	libglib2.0-cil-dev \
+	golang-gir-gio-2.0-dev \
+	libgtk-3-dev \
+	libwnck-3-dev \
+	libxfce4ui-2-dev \
+	libxfce4panel-2.0-dev \
+	intltool
+	
+	wget https://archive.xfce.org/src/panel-plugins/xfce4-docklike-plugin/0.4/xfce4-docklike-plugin-0.4.1.tar.bz2
+	tar -xvjf xfce4-docklike-plugin-0.4.1.tar.bz2 && cd xfce4-docklike-plugin-0.4.1
+	./configure
+	make
+	sudo make install
+}
+
+run_custom_desktop() {
+
+	git clone https://github.com/Warcren/qogir-theme.git
+	./qogir-theme/install.sh
+	./qogir-theme/install.sh --tweaks round
+
+	git clone https://github.com/Warcren/qogir-icon-theme.git
+	mkdir -p $HOME/.icons
+	./qogir-icon-theme/install.sh -d $HOME/.icons
+
+	#fonts.zip
+	unzip fonts.zip
+	mv fonts ~/.local/share/
+
+	#Setup Ulauncher
+	unzip ulauncher-theme-goxir-dark.zip
+	mkdir -p ~/.config/ulauncher/user-themes/
+	mv goxir-dark ~/.config/ulauncher/user-themes/
+
+	#Move Menu Config
+	unzip whisker-menu.gtk.css.dark
+	mv gtk.css ~/.config/gtk-3.0/
+	xfce4-panel -r
+
+	#Install Conky
+	unzip conky.zip
+	mv conky ~/.config/
+
+	#Install Picom
+	unzip picom.zip
+	mkdir -p $HOME/.config/picom
+	mv picom/picom.desktop $HOME/.config/autostart
+	mv picom/picom.conf $HOME/.config/picom
+}
+
 # Main script
 echo "Starting script..."
 
@@ -155,16 +217,26 @@ add_code_to_file /root/.bashrc
 
 #Install Additional Packages
 run_nala_installPackages
+
+#Installs Nix Package Manager
 run_nix_install
 
-#Sets the Nix Enviroment so it can be used and installs jellyfin
-#run_nixjellyfin
+#Installs Nix Packages
+run_installnixpack
 
-#Create and start Jellyfin service
-#create_jellyfin_service
+#Install LightDm
+run_install_lightdm
 
 #Hardens Server
 setup_security
 
-echo "Script finished."
+#Install Minimal XFCE Desktop Manager
+run_xfce_install
 
+#Install 
+run_xfce_dock_install
+
+#Custom Desktop
+run_custom_desktop
+
+echo "Script finished."
