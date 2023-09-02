@@ -16,6 +16,7 @@ apt nala -y \
     thunar \
     xfce4-appfinder \
     xfce4-panel \
+    xfce4-panel-profiles \
     xfce4-pulseaudio-plugin \
     xfce4-whiskermenu-plugin \
     xfce4-session \
@@ -27,10 +28,7 @@ apt nala -y \
     adwaita-qt \
     qt5ct \
     network-manager-openvpn network-manager-gnome \
-    network-manager-openvpn-gnome \
-    papirus-icon-theme \
-    qt5ct \
-    adwaita-qt
+    network-manager-openvpn-gnome
 
 echo 
 echo xfce install complete, please reboot and issue 'startx'
