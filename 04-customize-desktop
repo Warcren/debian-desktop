@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+
+git clone https://github.com/Warcren/qogir-theme.git
+./qogir-theme/install.sh
+./qogir-theme/install.sh --tweaks round
+
+git clone https://github.com/Warcren/qogir-icon-theme.git
+mkdir -p $HOME/.icons
+./qogir-icon-theme/install.sh -d $HOME/.icons
+
+#fonts.zip
+unzip fonts.zip
+mv fonts ~/.local/share/
+
+#Setup Ulauncher
+nix profile install nixpkgs#ulauncher
+unzip ulauncher-theme-goxir-dark.zip
+mkdir -p ~/.config/ulauncher/user-themes/
+mv goxir-dark ~/.config/ulauncher/user-themes/
+
+#Move Menu Config
+unzip whisker-menu.gtk.css.dark
+mv gtk.css ~/.config/gtk-3.0/
+xfce4-panel -r
+
+#Install Conky
+nix profile install nixpkgs#conky
+unzip conky.zip
+mv conky ~/.config/
+
+#Install Picom
+sudo nala install picom
+unzip picom.zip
+mkdir -p $HOME/.config/picom
+mv picom/picom.desktop $HOME/.config/autostart
+mv picom/picom.conf $HOME/.config/picom
