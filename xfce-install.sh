@@ -28,8 +28,6 @@ apt nala -y \
     qt5ct \
     network-manager-openvpn network-manager-gnome \
     network-manager-openvpn-gnome \
-    paper-icon-theme \
-    moka-icon-theme \
     papirus-icon-theme \
     qt5ct \
     adwaita-qt
