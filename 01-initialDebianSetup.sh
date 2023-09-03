@@ -111,6 +111,8 @@ chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.xsessionrc
     sudo nala install  -y \
     libxfce4ui-utils \
     thunar \
+    thunar-volman \
+    thunar-archive-plugin \
     xfce4-appfinder \
     xfce4-panel \
     xfce4-panel-profiles \
@@ -118,7 +120,7 @@ chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.xsessionrc
     xfce4-whiskermenu-plugin \
     xfce4-session \
     xfce4-settings \
-    xfce4-terminal \
+    kitty \
     xfconf \
     xfdesktop4 \
     xfwm4 \
@@ -126,7 +128,10 @@ chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.xsessionrc
     qt5ct \
     network-manager-openvpn network-manager-gnome \
     network-manager-openvpn-gnome \
-    sassc
+    sassc \
+    ristretto \
+    mpv \
+    mupdf
 }
 
 run_xfce_dock_install() {
