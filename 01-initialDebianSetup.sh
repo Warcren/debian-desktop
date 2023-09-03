@@ -253,6 +253,6 @@ run_xfce_install
 run_xfce_dock_install
 
 #Custom Desktop
-run_custom_desktop
+#run_custom_desktop
 
 echo "Script finished."
