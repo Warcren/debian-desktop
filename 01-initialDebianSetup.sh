@@ -151,7 +151,8 @@ chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.xsessionrc
 
 run_xfce_dock_install() {
 
-	sudo nala install -y \ 
+#Can we uninstall some packages after Install?
+sudo nala install -y \
 	wget \
 	xorg-dev \
 	libglib2.0-cil-dev \
@@ -160,13 +161,28 @@ run_xfce_dock_install() {
 	libwnck-3-dev \
 	libxfce4ui-2-dev \
 	libxfce4panel-2.0-dev \
-	intltool
+	intltool \
+	bzip2 \
+	build-essential \
+	xfce4-dev-tools
 	
-	wget https://archive.xfce.org/src/panel-plugins/xfce4-docklike-plugin/0.4/xfce4-docklike-plugin-0.4.1.tar.bz2
-	tar -xvjf xfce4-docklike-plugin-0.4.1.tar.bz2 && cd xfce4-docklike-plugin-0.4.1
-	./configure
+	#wget https://archive.xfce.org/src/panel-plugins/xfce4-docklike-plugin/0.4/xfce4-docklike-plugin-0.4.1.tar.bz2
+	#tar -xvjf xfce4-docklike-plugin-0.4.1.tar.bz2 && cd xfce4-docklike-plugin-0.4.1
+	#./configure
+	#make
+	#sudo make install
+	#cd ..
+	
+	git clone https://gitlab.xfce.org/panel-plugins/xfce4-docklike-plugin.git && cd xfce4-docklike-plugin
+	./autogen.sh
 	make
 	sudo make install
+
+	
+	
+	cd /usr/share/xfce4/panel/plugins/
+	sudo ln -s /usr/local/share/xfce4/panel/plugins/docklike.desktop docklike.desktop
+	cd /home/$SUDO_USER/debian-desktop/
 }
 
 run_custom_desktop() {
@@ -176,8 +192,8 @@ run_custom_desktop() {
 	./qogir-theme/install.sh --tweaks round
 
 	git clone https://github.com/Warcren/qogir-icon-theme.git
-	mkdir -p $HOME/.icons
-	./qogir-icon-theme/install.sh -d $HOME/.icons
+	mkdir -p "$homedir/.icons"
+	./qogir-icon-theme/install.sh -d "$homedir/.icons"
 
 	#fonts.zip
 	unzip fonts.zip
@@ -185,23 +201,23 @@ run_custom_desktop() {
 
 	#Setup Ulauncher
 	unzip ulauncher-theme-goxir-dark.zip
-	mkdir -p ~/.config/ulauncher/user-themes/
-	mv goxir-dark ~/.config/ulauncher/user-themes/
+	mkdir -p "$homedir/.config/ulauncher/user-themes/"
+	mv goxir-dark "$homedir/ulauncher/user-themes/"
 
 	#Move Menu Config
 	unzip whisker-menu.gtk.css.dark
-	mv gtk.css ~/.config/gtk-3.0/
+	mv gtk.css "$homedir/gtk-3.0/"
 	xfce4-panel -r
 
 	#Install Conky
 	unzip conky.zip
-	mv conky ~/.config/
+	mv conky "$homedir/.config/"
 
 	#Install Picom
 	unzip picom.zip
-	mkdir -p $HOME/.config/picom
-	mv picom/picom.desktop $HOME/.config/autostart
-	mv picom/picom.conf $HOME/.config/picom
+	mkdir -p "$homedir/.config/picom"
+	mv picom/picom.desktop "$homedir/.config/autostart"
+	mv picom/picom.conf "$homedir/.config/picom"
 }
 
 # Main script
