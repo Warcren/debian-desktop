@@ -146,7 +146,8 @@ chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.xsessionrc
     adwaita-qt \
     qt5ct \
     network-manager-openvpn network-manager-gnome \
-    network-manager-openvpn-gnome
+    network-manager-openvpn-gnome \
+	sassc
 }
 
 run_xfce_dock_install() {
@@ -197,7 +198,7 @@ run_custom_desktop() {
 
 	#fonts.zip
 	unzip fonts.zip
-	mv fonts ~/.local/share/
+	mv fonts "$homedir/.local/share/"
 
 	#Setup Ulauncher
 	unzip ulauncher-theme-goxir-dark.zip
@@ -256,3 +257,4 @@ run_xfce_dock_install
 #run_custom_desktop
 
 echo "Script finished."
+
