@@ -147,7 +147,7 @@ chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.xsessionrc
     qt5ct \
     network-manager-openvpn network-manager-gnome \
     network-manager-openvpn-gnome \
-	sassc
+    sassc
 }
 
 run_xfce_dock_install() {
