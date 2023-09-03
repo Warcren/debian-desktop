@@ -1,5 +1,20 @@
 #!/usr/bin/env bash
 
+## check for sudo/root
+if ! [ $(id -u) = 0 ]; then
+  echo "This script must run with sudo, try again..."
+  exit 1
+fi
+
+# Get the username of the user who invoked sudo
+if [ "$SUDO_USER" ]; then
+  username="$SUDO_USER"
+else
+  username="$(whoami)"
+fi
+
+# Get the home directory of the user
+homedir=$(getent passwd "$username" | cut -d: -f6)
 
 run_custom_desktop() {
 
@@ -18,10 +33,11 @@ run_custom_desktop() {
 	#Setup Ulauncher
 	unzip ulauncher-theme-goxir-dark.zip
 	mkdir -p "$homedir/.config/ulauncher/user-themes/"
-	mv goxir-dark "$homedir/ulauncher/user-themes/"
+	mv goxir-dark "$homedir/.config/ulauncher/user-themes/"
 
 	#Move Menu Config
 	unzip whisker-menu.gtk.css.dark
+	mkdir -p "$homedir/gtk-3.0/"
 	mv gtk.css "$homedir/gtk-3.0/"
 	xfce4-panel -r
 
