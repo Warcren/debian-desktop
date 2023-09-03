@@ -55,30 +55,9 @@ sudo() {
 # This function runs the 'nala' command and installs several needed packages:
 run_nala_installPackages() {
 
-    sudo nala install -y xz-utils curl nano debconf ufw fail2ban net-tools iptables picom unzip
+    sudo nala install -y xz-utils curl nano debconf ufw fail2ban net-tools iptables picom unzip dbus-x11
 }
 
-# This function installs NixPackages:
-run_nix_install() {
-    echo "Running Nix Installation using  determinate.systems/nix installation command..."
-    curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
-
-}
-
-#This Function activates the nix-daemon script and installs Jellyfin using Nix
-run_installnixpack() {
-  # Define the commands to be run
-  command1=". /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
-  command2="nix profile install nixpkgs#librewolf"
-  command3="nix profile install nixpkgs#conky"
-  command4="nix profile install nixpkgs#ulauncher"
-
-  # Run the commands
-  eval "$command1"
-  eval "$command2"
-  eval "$command3"
-  eval "$command4"
-}
 #This function
 run_install_lightdm() {
     sudo nala install -y \
@@ -167,13 +146,6 @@ sudo nala install -y \
 	build-essential \
 	xfce4-dev-tools
 	
-	#wget https://archive.xfce.org/src/panel-plugins/xfce4-docklike-plugin/0.4/xfce4-docklike-plugin-0.4.1.tar.bz2
-	#tar -xvjf xfce4-docklike-plugin-0.4.1.tar.bz2 && cd xfce4-docklike-plugin-0.4.1
-	#./configure
-	#make
-	#sudo make install
-	#cd ..
-	
 	git clone https://gitlab.xfce.org/panel-plugins/xfce4-docklike-plugin.git && cd xfce4-docklike-plugin
 	./autogen.sh
 	make
@@ -205,12 +177,6 @@ add_code_to_file /root/.bashrc
 #Install Additional Packages
 run_nala_installPackages
 
-#Installs Nix Package Manager
-run_nix_install
-
-#Installs Nix Packages
-run_installnixpack
-
 #Install LightDm
 run_install_lightdm
 
@@ -224,4 +190,3 @@ run_xfce_install
 run_xfce_dock_install
 
 echo "Script finished."
-
