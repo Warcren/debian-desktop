@@ -37,8 +37,8 @@ run_custom_desktop() {
 
 	#Move Menu Config
 	unzip whisker-menu.gtk.css.dark
-	mkdir -p "$homedir/gtk-3.0/"
-	mv gtk.css "$homedir/gtk-3.0/"
+	mkdir -p "$homedir/.config/gtk-3.0/"
+	mv gtk.css "$homedir/.config/gtk-3.0/"
 	xfce4-panel -r
 
 	#Install Conky
