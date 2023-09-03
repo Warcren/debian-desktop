@@ -179,46 +179,16 @@ sudo nala install -y \
 	make
 	sudo make install
 
-	
-	
+		
 	cd /usr/share/xfce4/panel/plugins/
 	sudo ln -s /usr/local/share/xfce4/panel/plugins/docklike.desktop docklike.desktop
 	cd /home/$SUDO_USER/debian-desktop/
-}
-
-run_custom_desktop() {
-
-	git clone https://github.com/Warcren/qogir-theme.git
-	./qogir-theme/install.sh
-	./qogir-theme/install.sh --tweaks round
-
-	git clone https://github.com/Warcren/qogir-icon-theme.git
-	mkdir -p "$homedir/.icons"
-	./qogir-icon-theme/install.sh -d "$homedir/.icons"
-
-	#fonts.zip
-	unzip fonts.zip
-	mv fonts "$homedir/.local/share/"
-
-	#Setup Ulauncher
-	unzip ulauncher-theme-goxir-dark.zip
-	mkdir -p "$homedir/.config/ulauncher/user-themes/"
-	mv goxir-dark "$homedir/ulauncher/user-themes/"
-
-	#Move Menu Config
-	unzip whisker-menu.gtk.css.dark
-	mv gtk.css "$homedir/gtk-3.0/"
-	xfce4-panel -r
-
-	#Install Conky
-	unzip conky.zip
-	mv conky "$homedir/.config/"
-
-	#Install Picom
-	unzip picom.zip
-	mkdir -p "$homedir/.config/picom"
-	mv picom/picom.desktop "$homedir/.config/autostart"
-	mv picom/picom.conf "$homedir/.config/picom"
+ 	sudo mkdir -p /usr/lib/xfce4/panel-plugins/
+	sudo mkdir -p /usr/share/xfce4/panel-plugins/ 
+	sudo cp /usr/local/lib/xfce4/panel/plugins/libdocklike.la /usr/share/xfce4/panel-plugins/
+	sudo cp /usr/local/lib/xfce4/panel/plugins/libdocklike.so /usr/share/xfce4/panel-plugins/
+	sudo cp /usr/local/lib/xfce4/panel/plugins/libdocklike.la /usr/lib/xfce4/panel-plugins/
+	sudo cp /usr/local/lib/xfce4/panel/plugins/libdocklike.so /usr/lib/xfce4/panel-plugins/
 }
 
 # Main script
@@ -252,9 +222,6 @@ run_xfce_install
 
 #Install 
 run_xfce_dock_install
-
-#Custom Desktop
-#run_custom_desktop
 
 echo "Script finished."
 
