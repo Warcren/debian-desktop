@@ -88,6 +88,8 @@ run_conf_picom() {
 				[Install]
 				WantedBy=multi-user.target'
 
+  #Create Service File if it does not exist
+  sudo touch /etc/systemd/system/picom.service
   # Create the service file
   sudo echo "$service_code" > /etc/systemd/system/picom.service
   # Reload the systemd daemon to recognize the new service
@@ -119,7 +121,9 @@ run_conf_conky() {
 
 				[Install]
 				WantedBy=multi-user.target'
-
+  
+  #Create Service File if it does not exist
+  sudo touch /etc/systemd/system/conky.service
   # Create the service file
   sudo echo "$service_code" > /etc/systemd/system/conky.service
   # Reload the systemd daemon to recognize the new service
