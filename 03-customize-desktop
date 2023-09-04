@@ -24,11 +24,6 @@ run_custom_desktop() {
 	unzip fonts.zip
 	mv fonts "$homedir/.local/share/"
 
-	#Move Ulauncher Themes
-	unzip ulauncher-theme-goxir-dark.zip
-	mkdir -p "$homedir/.config/ulauncher/user-themes/"
-	mv goxir-dark "$homedir/.config/ulauncher/user-themes/"
-
 	#Move Menu Config
 	unzip whisker-menu.gtk.css.dark
 	mkdir -p "$homedir/.config/gtk-3.0/"
@@ -57,37 +52,17 @@ run_custom_desktop() {
 	sudo mv debianlogo.png /etc/lightdm/
 }
 
-run_conf_ulauncher() {
+run_conf_rofi() {
 
-  # Define the ulauncher service.
-  service_code='[Unit]
-				Description=Ulauncher App Launcher
-				After=network.target
+	unzip rofi.zip
+	mkdir -p "$homedir/.config/rofi"
+	mv config.rasi "$homedir/.config/rofi/"
 
-				[Service]
-				User=leo
-				Group=leo
-				UMask=002
-
-				Environment="DISPLAY=:0"
-
-				Type=simple
-				ExecStart=/home/leo/.nix-profile/bin/ulauncher
-				Restart=on-failure
-				RestartSec=5
-				TimeoutStopSec=20
-
-				[Install]
-				WantedBy=multi-user.target'
-
-  # Create the service file
-  sudo echo "$service_code" > /etc/systemd/system/ulauncher.service
-  # Reload the systemd daemon to recognize the new service
-  sudo systemctl daemon-reload
-  # Enable the service to start automatically at boot
-  sudo systemctl enable ulauncher.service
-  # Start the service
-  sudo systemctl start ulauncher.service
+	xbindkeys --defaults > "$homedir/.xbindkeysrc"
+	echo '"rofi -show drun"
+  Control + space' >> "$homedir/.xbindkeysrc"
+	echo "xbindkeys &" >> "$homedir/.xinitrc"
+	xbindkeys
 }
 
 run_conf_picom() {
@@ -177,6 +152,10 @@ run_conf_desktop() {
 	xfconf-query -c xfwm4 -p /general/title_font -s "Roboto Bold 10"
 	#Disable WIndows Manager Display Composition
 	xfconf-query -c xfwm4 -p /general/use_compositing -s false
+	#Auto Start xbindkeys at login
+	echo "xbindkeys &" >> ~/.xinitrc
+	#Faster Grub
+	sudo sed -i 's/GRUB_TIMEOUT=[0-9]\+/GRUB_TIMEOUT=1/' /etc/default/grub && sudo update-grub
 
 }
 
@@ -201,8 +180,8 @@ run_conf_cleanup() {
 #Custom Desktop
 run_custom_desktop
 
-#Configures Ulauncher After installation
-run_conf_ulauncher
+#Configures Rofi with xbindkeys After installation
+run_conf_rofi
 
 #Configures Picom After installation
 run_conf_picom
