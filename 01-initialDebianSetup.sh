@@ -189,11 +189,12 @@ sudo nala install -y \
 }
 
 run_bash_install() {
+	cd "$homedir/"
 	git clone https://github.com/Warcren/mybash.git
  	cd mybash
   	chmod +x setup.sh
    	sudo ./setup.sh
-    	cd ..
+    	cd "$homedir/debian-desktop"
 }
 
 # Main script
