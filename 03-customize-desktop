@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-## check for sudo/root
-if ! [ $(id -u) = 0 ]; then
-  echo "This script must run with sudo, try again..."
-  exit 1
-fi
-
 # Get the username of the user who invoked sudo
 if [ "$SUDO_USER" ]; then
   username="$SUDO_USER"
@@ -19,18 +13,18 @@ homedir=$(getent passwd "$username" | cut -d: -f6)
 run_custom_desktop() {
 
 	git clone https://github.com/Warcren/qogir-theme.git
-	./qogir-theme/install.sh
-	./qogir-theme/install.sh --tweaks round
+	sudo ./qogir-theme/install.sh
+	sudo ./qogir-theme/install.sh --tweaks round
 
 	git clone https://github.com/Warcren/qogir-icon-theme.git
 	mkdir -p "$homedir/.icons"
-	./qogir-icon-theme/install.sh -d "$homedir/.icons"
+	sudo ./qogir-icon-theme/install.sh -d "$homedir/.icons"
 
-	#fonts.zip
+	#Move Font Files
 	unzip fonts.zip
 	mv fonts "$homedir/.local/share/"
 
-	#Setup Ulauncher
+	#Move Ulauncher Themes
 	unzip ulauncher-theme-goxir-dark.zip
 	mkdir -p "$homedir/.config/ulauncher/user-themes/"
 	mv goxir-dark "$homedir/.config/ulauncher/user-themes/"
@@ -41,16 +35,162 @@ run_custom_desktop() {
 	mv gtk.css "$homedir/.config/gtk-3.0/"
 	xfce4-panel -r
 
-	#Install Conky
+	#Move Conky Configuration files
 	unzip conky.zip
 	mv conky "$homedir/.config/"
 
-	#Install Picom
+	#Move Picom configuration files
 	unzip picom.zip
 	mkdir -p "$homedir/.config/picom"
 	mv picom/picom.desktop "$homedir/.config/autostart"
 	mv picom/picom.conf "$homedir/.config/picom"
+	
+	#Move LightDm Configuration Files and Wallpaper
+	unzip wallpaper.zip
+	sudo mv debian-darkstone.png /usr/share/backgrounds/xfce/
+	sudo mv main_wallpaper.jpg /usr/share/backgrounds/xfce/
+	sudo mv gandalf_cli_wallpaper.jpg /usr/share/backgrounds/xfce/
+	sudo mv lightdm_wallpaper.jpg /usr/share/backgrounds/xfce/
+	sudo mv -f lightdm.conf /etc/lightdm/
+	sudo mv -f slick-greeter.conf /etc/lightdm/
+	sudo mv debian-logo-wallpaper.png /etc/lightdm/
+	sudo mv debianlogo.png /etc/lightdm/
+}
+
+run_conf_ulauncher() {
+
+  # Define the ulauncher service.
+  service_code='[Unit]
+				Description=Ulauncher App Launcher
+				After=network.target
+
+				[Service]
+				User=leo
+				Group=leo
+				UMask=002
+
+				Environment="DISPLAY=:0"
+
+				Type=simple
+				ExecStart=/home/leo/.nix-profile/bin/ulauncher
+				Restart=on-failure
+				RestartSec=5
+				TimeoutStopSec=20
+
+				[Install]
+				WantedBy=multi-user.target'
+
+  # Create the service file
+  echo "$service_code" > /etc/systemd/system/ulauncher.service
+  # Reload the systemd daemon to recognize the new service
+  systemctl daemon-reload
+  # Enable the service to start automatically at boot
+  systemctl enable ulauncher.service
+  # Start the service
+  systemctl start ulauncher.service
+}
+
+run_conf_picom() {
+
+  # Define the picom service.
+  service_code='[Unit]
+				Description=Picom App Launcher
+				After=network.target
+
+				[Service]
+				User=leo
+				Group=leo
+				UMask=002
+
+				Environment="DISPLAY=:0"
+
+				Type=simple
+				ExecStart=/usr/bin/picom
+				Restart=on-failure
+				RestartSec=5
+				TimeoutStopSec=20
+
+				[Install]
+				WantedBy=multi-user.target'
+
+  # Create the service file
+  echo "$service_code" > /etc/systemd/system/picom.service
+  # Reload the systemd daemon to recognize the new service
+  systemctl daemon-reload
+  # Enable the service to start automatically at boot
+  systemctl enable picom.service
+  # Start the service
+  systemctl start picom.service
+}
+
+run_conf_conky() {
+
+
+  # Define the Conky service.
+  service_code='[Unit]
+				Description=Conky service
+				After=network-online.target
+
+				[Service]
+				User=leo
+				Group=leo
+				UMask=002
+
+				Type=simple
+				ExecStart=/home/leo/.config/conky/Regulus/start.sh
+				Restart=on-failure
+				RestartSec=5
+				TimeoutStopSec=20
+
+				[Install]
+				WantedBy=multi-user.target'
+
+  # Create the service file
+  echo "$service_code" > /etc/systemd/system/conky.service
+  # Reload the systemd daemon to recognize the new service
+  systemctl daemon-reload
+  # Enable the service to start automatically at boot
+  systemctl enable conky.service
+  # Start the service
+  systemctl start conky.service
+}
+
+run_conf_desktop() {
+
+	#Apply Default font and size
+	xfconf-query -c xsettings -p /Gtk/FontName -s "Roboto 10"
+	#Apply Default Monospace Font and size
+	xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "MesloLGS NF 10"
+	#Apply Default Theme
+	xfconf-query -c xsettings -p /Net/ThemeName -s "Qogir-Dark"
+	#Apply Default Theme Icons
+	xfconf-query -c xsettings -p /Net/IconThemeName -s "Qogir-Dark"
+	#Apply Default Mouse Theme
+	xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Qogir-Dark"
+	#Upload and apply Panel Profile backup
+	xfce4-panel-profiles load "$homedir/xfce4/xfce4-panel-conf.tar.bz2"
+	#Apply Default Window Manager Style
+	xfconf-query -c xfwm4 -p /general/theme -s "Qogir-Dark"
+	#Sets the default Window Manager button layout to Minimize, Maximize and Close Top Right
+	xfconf-query -c xfwm4 -p /general/button_layout -s "|HMC"
+	#Sets the Window Manager Title font
+	xfconf-query -c xfwm4 -p /general/title_font -s "Roboto Bold 10"
+	#Disable WIndows Manager Display Composition
+	xfconf-query -c xfwm4 -p /general/use_compositing -s false
+
 }
 
 #Custom Desktop
 run_custom_desktop
+
+#Configures Ulauncher After installation
+run_conf_ulauncher
+
+#Configures Picom After installation
+run_conf_picom
+
+#Configures Conky After installation
+run_conf_conky
+
+#Personalize some settings
+run_conf_desktop
