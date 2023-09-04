@@ -147,7 +147,8 @@ chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.xsessionrc
     sassc \
     ristretto \
     mpv \
-    mupdf
+    mupdf \
+    trash-cli
 }
 
 run_xfce_dock_install() {
@@ -184,6 +185,14 @@ sudo nala install -y \
 	sudo cp /usr/local/lib/xfce4/panel/plugins/libdocklike.so /usr/lib/xfce4/panel-plugins/
 }
 
+run_bash_install() {
+	git clone https://github.com/Warcren/mybash.git
+ 	cd mybash
+  	chmod +x setup.sh
+   	sudo ./setup.sh
+    	cd ..
+}
+
 # Main script
 echo "Starting script..."
 
@@ -210,4 +219,8 @@ run_xfce_install
 #Install 
 run_xfce_dock_install
 
+#Setup Custom Bash
+run_bash_install
+
 echo "Script finished."
+
