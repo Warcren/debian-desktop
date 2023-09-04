@@ -55,7 +55,7 @@ sudo() {
 # This function runs the 'nala' command and installs several needed packages:
 run_nala_installPackages() {
 
-    sudo nala install -y xz-utils curl nano debconf ufw fail2ban net-tools iptables picom unzip dbus-x11
+    sudo nala install -y xz-utils curl nano debconf ufw fail2ban net-tools iptables picom unzip dbus-x11 neofetch htop
 }
 
 #This function
@@ -113,7 +113,6 @@ chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.xsessionrc
     thunar \
     thunar-volman \
     thunar-archive-plugin \
-    xfce4-appfinder \
     xfce4-panel \
     xfce4-panel-profiles \
     xfce4-pulseaudio-plugin \
