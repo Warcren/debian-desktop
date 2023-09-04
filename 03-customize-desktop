@@ -81,13 +81,13 @@ run_conf_ulauncher() {
 				WantedBy=multi-user.target'
 
   # Create the service file
-  echo "$service_code" > /etc/systemd/system/ulauncher.service
+  sudo echo "$service_code" > /etc/systemd/system/ulauncher.service
   # Reload the systemd daemon to recognize the new service
-  systemctl daemon-reload
+  sudo systemctl daemon-reload
   # Enable the service to start automatically at boot
-  systemctl enable ulauncher.service
+  sudo systemctl enable ulauncher.service
   # Start the service
-  systemctl start ulauncher.service
+  sudo systemctl start ulauncher.service
 }
 
 run_conf_picom() {
@@ -114,13 +114,13 @@ run_conf_picom() {
 				WantedBy=multi-user.target'
 
   # Create the service file
-  echo "$service_code" > /etc/systemd/system/picom.service
+  sudo echo "$service_code" > /etc/systemd/system/picom.service
   # Reload the systemd daemon to recognize the new service
-  systemctl daemon-reload
+  sudo systemctl daemon-reload
   # Enable the service to start automatically at boot
-  systemctl enable picom.service
+  sudo systemctl enable picom.service
   # Start the service
-  systemctl start picom.service
+  sudo systemctl start picom.service
 }
 
 run_conf_conky() {
@@ -146,13 +146,13 @@ run_conf_conky() {
 				WantedBy=multi-user.target'
 
   # Create the service file
-  echo "$service_code" > /etc/systemd/system/conky.service
+  sudo echo "$service_code" > /etc/systemd/system/conky.service
   # Reload the systemd daemon to recognize the new service
-  systemctl daemon-reload
+  sudo systemctl daemon-reload
   # Enable the service to start automatically at boot
-  systemctl enable conky.service
+  sudo systemctl enable conky.service
   # Start the service
-  systemctl start conky.service
+  sudo systemctl start conky.service
 }
 
 run_conf_desktop() {
