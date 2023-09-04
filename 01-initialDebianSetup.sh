@@ -170,6 +170,9 @@ run_bash_install() {
 	cd "$homedir/"
 	git clone https://github.com/Warcren/mybash.git
  	cd mybash
+  	mv setup.sh "$homedir/"
+   	mv starship.toml "$homedir/"
+    	cd "$homedir/"
   	chmod +x setup.sh
    	sudo ./setup.sh
     	cd "$homedir/debian-desktop"
@@ -198,7 +201,7 @@ run_xfce_install
 run_xfce_dock_install
 
 #Setup Custom Bash
-#run_bash_install
+run_bash_install
 
 echo "Script finished."
 
