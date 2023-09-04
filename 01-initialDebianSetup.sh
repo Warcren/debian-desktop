@@ -55,7 +55,24 @@ sudo() {
 # This function runs the 'nala' command and installs several needed packages:
 run_nala_installPackages() {
 
-    sudo nala install -y xz-utils curl nano debconf ufw fail2ban net-tools iptables picom unzip dbus-x11 neofetch htop
+    sudo nala install -y \
+    	xz-utils \
+     	curl \
+      	nano \
+       	debconf \
+	ufw \
+ 	fail2ban \
+  	net-tools \
+   	iptables \
+    	picom \	
+     	unzip \
+      	dbus-x11 \
+       	neofetch \
+	htop \
+ 	psmisc \
+  	jq \
+   	sed \
+    	gawk
 }
 
 #This function
