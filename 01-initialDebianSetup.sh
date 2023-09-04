@@ -198,7 +198,7 @@ run_xfce_install
 run_xfce_dock_install
 
 #Setup Custom Bash
-run_bash_install
+#run_bash_install
 
 echo "Script finished."
 
