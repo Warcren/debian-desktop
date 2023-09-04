@@ -74,7 +74,8 @@ run_nala_installPackages() {
    	sed \
     	gawk \
      	iw \
-      	xbindkeys
+      	xbindkeys \
+       	rofi
 }
 
 #This function
