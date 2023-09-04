@@ -72,7 +72,8 @@ run_nala_installPackages() {
  	psmisc \
   	jq \
    	sed \
-    	gawk
+    	gawk \
+     	iw
 }
 
 #This function
