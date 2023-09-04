@@ -111,13 +111,17 @@ setup_security() {
 
     # PREVENT IP SPOOFS
     cat <<EOF > /etc/host.conf
-order bind,hosts
-multi on
-EOF
+	order bind,hosts
+	multi on
+	EOF
 
     # Enable fail2ban
     sudo cp jail.local /etc/fail2ban/
+    sudo touch /var/log/auth.log
+    echo "logpath = /var/log/auth.log" | sudo tee -a /etc/fail2ban/jail.d/defaults-debian.conf
+
     sudo systemctl enable fail2ban
+    sudo systemctl daemon-reload
     sudo systemctl start fail2ban
 
     echo "listening ports"
