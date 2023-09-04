@@ -15,6 +15,9 @@ run_bash_install() {
 	cd "$homedir/"
 	git clone https://github.com/Warcren/mybash.git
  	cd mybash
+  	mv setup.sh "$homedir/"
+   	mv starship.toml "$homedir/"
+    	cd "$homedir/"
   	chmod +x setup.sh
    	sudo ./setup.sh
     	cd "$homedir/debian-desktop"
