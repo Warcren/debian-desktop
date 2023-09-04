@@ -1,0 +1,29 @@
+#!/bin/bash
+
+## check for sudo/root
+if ! [ $(id -u) = 0 ]; then
+  echo "This script must run with sudo, try again..."
+  exit 1
+fi
+
+# Get the username of the user who invoked sudo
+if [ "$SUDO_USER" ]; then
+  username="$SUDO_USER"
+else
+  username="$(whoami)"
+fi
+
+# Get the home directory of the user
+homedir=$(getent passwd "$username" | cut -d: -f6)
+
+run_bash_install() {
+	cd "$homedir/"
+	git clone https://github.com/Warcren/mybash.git
+ 	cd mybash
+  	chmod +x setup.sh
+   	sudo ./setup.sh
+    	cd "$homedir/debian-desktop"
+}
+
+#Setup Custom Bash
+run_bash_install
