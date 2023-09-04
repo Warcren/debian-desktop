@@ -73,7 +73,8 @@ run_nala_installPackages() {
   	jq \
    	sed \
     	gawk \
-     	iw
+     	iw \
+      	xbindkeys
 }
 
 #This function
