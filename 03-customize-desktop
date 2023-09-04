@@ -138,28 +138,47 @@ run_conf_desktop() {
 
 	#Apply Default font and size
 	xfconf-query -c xsettings -p /Gtk/FontName -s "Roboto 10"
+	
 	#Apply Default Monospace Font and size
 	xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "MesloLGS NF 10"
+	
 	#Apply Default Theme
 	xfconf-query -c xsettings -p /Net/ThemeName -s "Qogir-Dark"
+	
 	#Apply Default Theme Icons
 	xfconf-query -c xsettings -p /Net/IconThemeName -s "Qogir-Dark"
+	
 	#Apply Default Mouse Theme
 	xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Qogir-Dark"
+	
 	#Upload and apply Panel Profile backup
 	xfce4-panel-profiles load "$homedir/xfce4/xfce4-panel-conf.tar.bz2"
+	
 	#Apply Default Window Manager Style
 	xfconf-query -c xfwm4 -p /general/theme -s "Qogir-Dark"
+	
 	#Sets the default Window Manager button layout to Minimize, Maximize and Close Top Right
 	xfconf-query -c xfwm4 -p /general/button_layout -s "|HMC"
+	
 	#Sets the Window Manager Title font
 	xfconf-query -c xfwm4 -p /general/title_font -s "Roboto Bold 10"
+	
 	#Disable WIndows Manager Display Composition
 	xfconf-query -c xfwm4 -p /general/use_compositing -s false
+	
 	#Auto Start xbindkeys at login
 	echo "xbindkeys &" >> ~/.xinitrc
+	
 	#Faster Grub
 	sudo sed -i 's/GRUB_TIMEOUT=[0-9]\+/GRUB_TIMEOUT=1/' /etc/default/grub && sudo update-grub
+	
+	# Enable zswap
+	sudo sed -i '/^GRUB_CMDLINE_LINUX_DEFAULT/ s/"$/ zswap.enabled=1"/' /etc/default/grub
+	sudo update-grub
+	
+	#Disable Hyper-Thread Mitigations for more performance on Desktop and use zswap
+	echo "vm.swappiness = 10" | sudo tee -a /etc/sysctl.conf
+	echo "kernel.nosmt = 1" | sudo tee -a /etc/sysctl.conf
 
 }
 
