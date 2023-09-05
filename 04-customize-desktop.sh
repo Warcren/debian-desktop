@@ -22,7 +22,7 @@ run_custom_desktop() {
 
 	#Move Font Files
 	unzip fonts.zip
-	mv fonts "$homedir/.local/share/"
+	sudo mv fonts "$homedir/.local/share/"
 
 	#Move Menu Config
 	unzip whisker-menu.gtk.css.dark
@@ -121,7 +121,10 @@ run_conf_conky() {
 
 				[Install]
 				WantedBy=multi-user.target'
-  
+
+  #Make Conky executable
+  chmod +x "$homedir/.config/conky/Regulus/start.sh"
+  chmod +x "$homedir/.config/conky/Regulus/scripts/weather.sh"
   #Create Service File if it does not exist
   sudo touch /etc/systemd/system/conky.service
   # Create the service file
@@ -146,17 +149,18 @@ run_conf_desktop() {
 	xfconf-query -c xsettings -p /Net/ThemeName -s "Qogir-Dark"
 	
 	#Apply Default Theme Icons
-	xfconf-query -c xsettings -p /Net/IconThemeName -s "Qogir-Dark"
+	xfconf-query -c xsettings -p /Net/IconThemeName -s "Qogir-dark"
 	
 	#Apply Default Mouse Theme
-	xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Qogir-Dark"
+	xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Qogir-dark"
 	
 	#Upload and apply Panel Profile backup
-	xfce4-panel-profiles load "$homedir/xfce4/xfce4-panel-conf.tar.bz2"
+ 	unzip xfce4.zip
+	xfce4-panel-profiles load "$homedir/debian-desktop/xfce4/xfce4-panel-conf.tar.bz2"
 	
 	#Apply Default Window Manager Style
 	xfconf-query -c xfwm4 -p /general/theme -s "Qogir-Dark"
-	
+ 
 	#Sets the default Window Manager button layout to Minimize, Maximize and Close Top Right
 	xfconf-query -c xfwm4 -p /general/button_layout -s "|HMC"
 	
