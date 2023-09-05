@@ -23,17 +23,14 @@ run_installnix() {
   command1=". /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
   command2="nix profile install nixpkgs#librewolf"
   command3="nix profile install nixpkgs#conky"
-  command4="nix profile install nixpkgs#ulauncher"
-  command5="nix profile install nixpkgs#gnome.gedit"
-  command6="nix profile install nixpkgs#mullvad-browser"
-
+  command4="nix profile install nixpkgs#gnome.gedit"
+  command5="nix profile install nixpkgs#mullvad-browser"
   # Run the commands
   eval "$command1"
   eval "$command2"
   eval "$command3"
   eval "$command4"
   eval "$command5"
-  eval "$command6"
 }
 
 #Installs Nix Package Manager
