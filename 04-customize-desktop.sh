@@ -68,7 +68,7 @@ run_conf_rofi() {
 run_conf_picom() {
 
   # Define the picom service.
-  service_code='[Unit]
+  picom_code='[Unit]
 				Description=Picom App Launcher
 				After=network.target
 
@@ -91,7 +91,7 @@ run_conf_picom() {
   #Create Service File if it does not exist
   sudo touch /etc/systemd/system/picom.service
   # Create the service file
-  sudo echo "$service_code" > /etc/systemd/system/picom.service
+  echo "$picom_code" | sudo tee /etc/systemd/system/picom.service > /dev/null
   # Reload the systemd daemon to recognize the new service
   sudo systemctl daemon-reload
   # Enable the service to start automatically at boot
@@ -104,7 +104,7 @@ run_conf_conky() {
 
 
   # Define the Conky service.
-  service_code='[Unit]
+  conky_code='[Unit]
 				Description=Conky service
 				After=network-online.target
 
@@ -125,7 +125,7 @@ run_conf_conky() {
   #Create Service File if it does not exist
   sudo touch /etc/systemd/system/conky.service
   # Create the service file
-  sudo echo "$service_code" > /etc/systemd/system/conky.service
+  echo "$conky_code" | sudo tee /etc/systemd/system/conky.service > /dev/null
   # Reload the systemd daemon to recognize the new service
   sudo systemctl daemon-reload
   # Enable the service to start automatically at boot
