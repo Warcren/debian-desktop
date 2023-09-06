@@ -22,13 +22,14 @@ run_custom_desktop() {
 
 	#Move Font Files
 	unzip fonts.zip
+ 	mkdir -p "$homedir/.local/share/"
 	sudo mv fonts "$homedir/.local/share/"
 
 	#Move Menu Config
 	unzip whisker-menu.gtk.css.dark
 	mkdir -p "$homedir/.config/gtk-3.0/"
 	mv gtk.css "$homedir/.config/gtk-3.0/"
-	xfce4-panel -r
+	#xfce4-panel -r
 
 	#Move Conky Configuration files
 	unzip conky.zip
@@ -220,5 +221,5 @@ run_conf_conky
 run_conf_desktop
 
 #Cleanup
-run_conf_cleanup
+#run_conf_cleanup
 
